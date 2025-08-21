@@ -1,10 +1,10 @@
 # Simulated Attack
 
-# Sui Validator Exposure Analysis
+## Sui Validator Exposure Analysis
 
-## Executive Summary / TL;DR
+### Executive Summary / TL;DR
 
-The Sui Network is Vulnerable to 
+The Sui Network is Vulnerable to Coordinated Attacks Leading to Network Halt.
 
 Our external security scan found that validators controlling 3,955 of 10,000 voting power (39.6%) have critical vulnerabilities including open SSH ports and unpatched CVEs across multiple services. Since Sui halts at ≥3,334 voting power loss, **the network currently exceeds the failure threshold by 621 voting power** - a razor-thin margin.
 
@@ -112,7 +112,6 @@ The identified vulnerabilities present multiple attack vectors:
 
 - Direct exploitation via unpatched CVEs on various services
 - SSH brute-force or credential stuffing attacks
-- Lateral movement through exposed management interfaces
 - Potential container escape via Docker API exposure
 
 **Critical Assumption:** Validators who fail to secure public-facing services likely have equally poor internal security. This is not speculation - it's a pattern observed across thousands of security incidents. Poor external hygiene correlates strongly with:
