@@ -149,6 +149,41 @@ The identified vulnerabilities present multiple attack vectors:
 
 The true attack surface is almost certainly larger than what we've documented.
 
+## Coordinated Attack Model on Sui
+
+A coordinated attack has to treat the **network as a single entity**, not just individual nodes. By scanning the validator set holistically, we found that ~40% of total voting power shares the **same exposed services and repeated CVEs**.  
+
+### Phase 1 Reconnaissance
+- Attacker scans the validator set.  
+- Identifies ~40% of voting power with exploitable vulnerabilities.  
+- Maps which validators have the highest voting weight.
+
+### Phase 2 Preparation (hours to days)
+- Stage infrastructure to target multiple validators simultaneously.  
+- Prepare exploits for the specific CVEs.  
+- Could leverage cloud infrastructure or a rented botnet.  
+
+### Phase 3 Execution (minutes to hours)
+**Option A – Quick & Dirty**  
+- Exploit vulnerable validators simultaneously.  
+- Delete validator keys/data or kill processes.  
+- Network instantly loses ~40% voting power.  
+- Consensus halts once safety threshold (<66.7%) is breached.  
+
+**Option B Stealthy**  
+- Gradually compromise validators, install persistence/backdoors.  
+- Wait for an optimal moment (major transfer, high-value event).  
+- Trigger disruption: either halt the network or manipulate consensus.  
+
+### Real-world scenario
+- Compromising ~30 of the highest-voting-power vulnerable validators could cross the 33.4% Byzantine threshold.  
+- Cost: tens of thousands of dollars in cloud resources and a week of prep.  
+- Impact: network halted for days, multi-billion market cap destabilized.  
+- Once an attacker is in, that’s it — recovery could take weeks if keys are unencrypted or backups are missing.  
+
+### Why it matters
+This isn’t hypothetical — these are **real, exploitable CVEs and open SSH/Docker ports**. Any competent attacker with moderate resources could carry this out. By looking at the network holistically rather than isolated nodes, it’s clear the system as a whole is below safe Byzantine thresholds.  
+
 **Timeline Risk**: Based on current exploit activity observed in the wild, it seems almost impossible that one of these validators has not already been compromised.
 
 ## Prioritized Remediation Plan
