@@ -1,6 +1,6 @@
 # PGDN Project Status
 
-You can find open-source repos for for [pgdn.ai](http://pgdn.ai/)’s [here](https://github.com/pgdn-network).
+You can find open-source repos for [pgdn.ai](http://pgdn.ai/) [here](https://github.com/pgdn-network).
 
 **Status:** pre-release; parts are **not production ready** yet. We’re moving toward a runnable CLI that anyone can use. In parallel, we offer a **managed service** for operators who prefer a hosted workflow. 
 
