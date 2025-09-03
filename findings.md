@@ -4,8 +4,6 @@
 **Scope:** 122 total (118 validators, 4 public RPC)  
 **Method:** external observation only; no exploits
 
----
-
 ## Summary (counts & % of 122)
 
 | Category | Test (how it was established) | Count | % of N | Confidence |
@@ -19,8 +17,6 @@
 
 **Network posture score:** average **44 / 100** (range **15–93**). This is alarmingly low.
 
----
-
 ## Notes
 
 - **CVE-affected services**: Some of these are patched Ubuntu builds (backports applied). The 28.6% figure is therefore a conservative **upper bound** and may come down with operator verification.  
@@ -28,8 +24,6 @@
 - **Docker TCP (2375/tcp)**: Counts are **port-only** observations. We observed SYN/ACK across most validators, but no protocol handshake was confirmed. These are excluded from exploitability math. The widespread open state remains unexplained.  
 - **No WAF**: Only evaluated where an HTTP endpoint exists.  
 - **Public metrics**: Defined as Sui metrics endpoint reachable from the internet, not bound to localhost.  
-
----
 
 ## Definitions
 

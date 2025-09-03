@@ -8,14 +8,10 @@ If you believe your infrastructure may be included in our snapshot or you want h
 
 We are in the process of setting up a Discord and Telegram group.
 
----
-
 ## What to expect
 
 - We will **not** share per-node results until you **prove ownership** (see [VALIDATION.md](validation.md)).
 - Once validated, we can share your node’s **anonymised on-chain ID (node.uuid)**, the **score**, observation **categories**, timestamp, and a **remediation plan**.
-
----
 
 ## What we won’t do
 

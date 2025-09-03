@@ -70,6 +70,21 @@ Confusing a stock Apache index page with an RPC endpoint underscores why **indep
 - **2025-08-26** – Mysten final note: no baseline, "we don't manage independent validators"; offered to "pass along general messages"  
 - **2025-09-03** – No further reply; public disclosure via this repo
 
+### Response Summary
+
+Mysten Labs acknowledged the exposures but repeatedly framed them as "hygiene" rather than vulnerabilities.  
+
+Key points from their responses:
+
+- Confirmed Mysten’s two validators are patched Ubuntu/OpenSSH, but did not dispute version fingerprinting.  
+- Claimed 80/443 exposure was "intentional" for RPC, even though many nodes serve default Apache pages with known CVEs.  
+- Stated they "could not find any instances of 2375 being open," despite SYN/ACK being observable on nearly every validator.  
+- Emphasized that Mysten does not manage independent validators.  
+- Redirected issues to the bug bounty program (which does not cover posture).  
+- Legal instructed our internal contact at Mysten that he could no longer discuss the matter with us.  
+
+No minimum baseline, no remediation plan, and no guidance for operators was ever provided.
+
 ## Follow-Up: Subsequent Findings and Clarifications
 
 - **Mysten validators** fingerprint as Ubuntu 22.04 / OpenSSH 8.9p1. CVEs exist upstream, but backports appear patched. Issue = OPSEC, not active vuln.  
@@ -78,6 +93,7 @@ Confusing a stock Apache index page with an RPC endpoint underscores why **indep
 - **No baseline** exists for independent validators.  
 
 **Conclusion:** Systemic hygiene and OPSEC exposures across ~40% of the set represent a credible liveness risk. Without minimum standards, the network remains vulnerable to opportunistic or coordinated disruption.
+
 
 ## About PGDN – Why This Exists
 
