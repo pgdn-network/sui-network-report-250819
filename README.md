@@ -13,7 +13,7 @@ Our analysis reveals that Sui's validator infrastructure has sufficient attack s
 
 **This is not theoretical** - the current validator exposures cross the line where a chain halt becomes possible. One coordinated attack exploiting these known vulnerabilities could result in a multi-day network outage. Moreover, our findings came from analysing public ports, not the entire range. It’s expected that the misconfiguration issues are even wider.
 
-We estimate that within a week, the entire Sui network could be taken offline.
+Risk window: With ~40% of validators exposing management or web surfaces, a new SSH or web CVE combined with delayed patching could threaten liveness (halt at ~33.4% voting power). This assessment reflects external posture, not proof of exploitability.
 
 [Full technical analysis and methodology below and in the [simulated_attack.md](simulated_attack.md)]
 
@@ -106,3 +106,5 @@ Simon ([pgdn.ai](http://pgdn.ai/))
 - [Validation](validation.md)
 
 *This analysis represents a point-in-time assessment. Actual security posture may have changed. All scans were conducted under responsible disclosure principles with no exploitation or service disruption.*
+
+Licensing: CC BY-NC-ND 4.0 — journalists may quote with attribution to PGDN; commercial reuse and derivative datasets prohibited.

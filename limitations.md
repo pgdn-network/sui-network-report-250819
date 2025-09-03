@@ -11,8 +11,8 @@ This snapshot reflects what an unauthenticated internet client could observe dur
 
 1. **Version inference → CVE mapping**
 Banners/headers can be wrong, proxied, or masked; minor/patch versions affect CVE relevance.
-2. **Port identity confusion**
-An open port number is **not** proof of a specific service (e.g., anything can bind to 2375/tcp).
+2. **Port identity ≠ protocol**
+An open port number is not proof of the protocol behind it (e.g., anything can bind to 2375/tcp). Unless a **protocol handshake** succeeds, we mark it **LOW** confidence and exclude it from exploitability math.
 3. **Middleboxes / edges**
 CDNs, WAFs, NAT, and custom proxies can alter headers or responses.
 4. **Ephemeral state**

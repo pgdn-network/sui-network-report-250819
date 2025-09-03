@@ -31,8 +31,8 @@ The CVE database was downloaded from [nist](https://services.nvd.nist.gov/rest/j
 
 ## WAF/TLS checks (HTTP endpoints)
 
-- **TLS:** client hello and HTTP probe; counted “No TLS” only when clear‑text 200 observed.
-- **WAF:** multiple detectors (e.g., header/behavioral signatures). “No WAF” = no detectable WAF signature; not proof of absence.
+- **TLS:** client hello and HTTP probe; counted "No TLS" only when clear‑text 200 observed.
+- **WAF:** multiple detectors (e.g., header/behavioral signatures). "No WAF" = no detectable WAF signature; not proof of absence.
 
 ## Docker TCP (2375) checks
 
@@ -40,6 +40,13 @@ The CVE database was downloaded from [nist](https://services.nvd.nist.gov/rest/j
 - **No protocol fingerprinting:** this snapshot **did not** attempt `/_ping`, `/version`, or banner grabs.
 - **Interpretation:** classify as **Possible Docker TCP exposure (port-only)** with **Low** confidence. This can include false positives (port reuse/decoys/middleboxes).
 - **Roadmap:** future snapshots will add endpoint checks and TLS/mTLS detection to upgrade confidence.
+
+### Port 2375 clarification
+
+- This snapshot recorded **OPEN state on 2375/tcp** for many targets, but **did not** confirm Docker-TCP via protocol handshake.
+- We therefore classify 2375 as **LOW confidence** ("port-only") and **exclude it from exploitability math**. See `appendix_2375.md`.
+
+s cWe asked Sui to 
 
 ## Scoring
 
@@ -61,7 +68,7 @@ The CVE database was downloaded from [nist](https://services.nvd.nist.gov/rest/j
 
 **Confidence handling.**
 
-- Findings labeled **Low** confidence are **excluded** from the score by default (e.g., 2375/tcp “port-only” observations in this snapshot).
+- Findings labeled **Low** confidence are **excluded** from the score by default (e.g., 2375/tcp "port-only" observations in this snapshot).
 - **Medium/High** confidence findings are scored; higher confidence may carry slightly higher weight.
 
 **Normalization for cross-network comparison.**
