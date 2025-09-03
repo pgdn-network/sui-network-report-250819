@@ -2,109 +2,142 @@
 
 ## Critical Finding: Consensus Liveness at Risk
 
-**TL;DR: We found enough vulnerable validators to potentially halt Sui. 39.6% of voting power (3,955/10,000) had critical vulnerabilities on 18/08/2025. Network halts at 33.4% (3,334). Margin: 621 voting power.**
+**TL;DR:** External scans of the Sui network (Aug 2025) show that **~40% of voting power exposes SSH or default web servers, or runs CVE-affected services**.  
+Consensus halts if ~33.4% of voting power is disrupted. At the time of scan, **3,955 voting power (~39.6%) was exposed vs. 3,334 required to halt** — leaving only a 621 voting power margin.  
 
-Our analysis reveals that Sui's validator infrastructure has sufficient attack surface to be pushed below the Byzantine fault tolerance threshold. Through external scanning alone, we identified:
+This is a **credible systemic risk**. One coordinated attack timed with a new SSH or web CVE could result in a multi-day outage affecting billions in assets.  
 
-- **39.6% of voting power** externally exploitable via SSH exposure and/or known CVEs (validators only)
-- Network was **only 621 voting power away** from consensus failure
-- These are **public-facing vulnerabilities only** - internal security is likely worse considering findings
-- Recovery from a coordinated attack could take **days to weeks**
-
-**This is not theoretical** - the current validator exposures cross the line where a chain halt becomes possible. One coordinated attack exploiting these known vulnerabilities could result in a multi-day network outage. Moreover, our findings came from analysing public ports, not the entire range. It’s expected that the misconfiguration issues are even wider.
-
-Risk window: With ~40% of validators exposing management or web surfaces, a new SSH or web CVE combined with delayed patching could threaten liveness (halt at ~33.4% voting power). This assessment reflects external posture, not proof of exploitability.
+Key exposures observed:
+- **39.6% voting power** externally exposed via SSH and/or CVEs  
+- **28.6%** running CVE-affected services  
+- **38.5%** SSH publicly reachable  
+- **31.9%** serving websites (validators should not)  
+- **37%** exposing public metrics  
+- **95.1%** without a detectable WAF  
+- **~99%** with 2375/tcp responding (Docker-TCP port; port-only, protocol unconfirmed → **LOW confidence**)  
+- **Average PGDN score: 44/100** (critical range)  
 
 [Full technical analysis and methodology below and in the [simulated_attack.md](simulated_attack.md)]
 
-## Network-Wide Security Posture
+---
 
-**Aug 2025, PGDN.ai analyzed the Sui network. Scanning 122 nodes** (118 validators, 4 RPC):
+## Recent Interactions & Response
 
-- **39.6%** of voting power has critical vulnerabilities (SSH/CVEs)
-- **28.6%** running CVE-affected services
-- **38.5%** SSH publicly reachable
-- **31.9%** serving websites (validators shouldn't)
-- **37%** only displaying public metrics
-- **95.1%** no detectable WAF
-- **99%** with port 2375 exposed (Docker port; **port-only** check)
-- **Average PGDN score: 44/100** (critical range)
+We disclosed these findings privately to Mysten Labs  & Sui in August 2025.  
 
-**Methods:** Service discovery, banner + protocol handshakes, conservative CPE→CVE mapping. External scanning only - internal security likely worse. Findings are aggregated and anonymized.
+- Mysten acknowledged SSH and Apache exposure but stated these were "hygiene, not vulnerabilities."  
+- They confirmed Mysten's own two validators are patched, but did not dispute our fingerprinting of exact OS and OpenSSH versions.  
+- They said 80/443 exposure was "intentional" for RPC, and claimed they "could not find 2375 open."  
+- They emphasized Mysten does not manage independent validators and pointed to the bug bounty program (which does not cover posture).  
+- No baseline, no timeline, and no guidance for operators was provided.  
+- Separately, their legal team instructed our contact inside Mysten that he could no longer discuss this with us.  
 
-This repository is a factual record. Operators can reproduce category checks without disclosing identities. Content hashes published for integrity.
+**Our position:** Hygiene and OPSEC exposures are not cosmetic. They are the *entry points* attackers chain into consensus-level disruption. In decentralized systems, the absence of a minimum baseline leaves the entire network at risk.
 
-A visual heatmmap displaying the issues can be found on [https://pgdn.ai/heatmap](https://pgdn.ai/heatmap)
+---
 
-**Contact:** Simon (sm@pgdn.ai) for private remediation support.
+## Why Hygiene & OPSEC Matter
+
+- **Version Fingerprinting**  
+  Public SSH and HTTP banners leak exact Ubuntu/OpenSSH versions. Even patched, this gives adversaries pre-built target lists the moment a new CVE drops.  
+
+- **Default Web Landers**  
+  Dozens of validators serve default Apache pages. This signals misconfiguration, provides proof-of-life to bots, and leaks headers that map build chains and CDNs.  
+
+- **SSH Reachability**  
+  Exposed SSH is the most abused management surface in history. Brute-force, leaked keys, or zero-days can all ride this port. Patched today ≠ safe tomorrow.  
+
+- **Unexplained Open Ports (2375/tcp)**  
+  SYN/ACK seen across most validators. Protocol unconfirmed, but such uniform patterns suggest latent exposure or misconfiguration. Attackers will not ignore it.  
+
+- **Cumulative Risk**  
+  One exposed node is an accident. 40% is systemic. With only a one-third threshold for consensus liveness, hygiene exposures at this scale create real financial risk.
+
+- **Default Web Landers Misinterpreted**  
+  Mysten Labs responded that 80/443 exposure was "intentional" for RPC.  
+  However, many validators are serving **default Apache landing pages** on those ports. Many with critical CVEs too.
+  This is not RPC — it is a misconfigured web server. Treating default landers as "intended RPC endpoints" is a fundamental misunderstanding of hygiene.  
+  Confusing a stock Apache index page with an RPC endpoint underscores why independent posture analysis is essential: without it, basic hygiene issues get dismissed as non-issues.
+
+---
 
 ## Responsible Disclosure Timeline
 
-Note: Initial disclosure attempts revealed fundamental misunderstandings about infrastructure security. The team appeared to believe that secure validator communications meant other exposed services weren't vulnerabilities. A CVE is a vulnerability regardless of which service or port it affects.
+- **2025-08-02** – Initial contact via intermediary to Sui security (SSH, CVE summary only)  
+- **2025-08-05** – Follow-up via intermediary with same categories  
+- **2025-08-15** – Discord #dev post requesting staff ticket (no info disclosed) – ignored  
+- **2025-08-18** – Formal disclosure email to Mysten Labs (SSH, CVEs, simulated attack scenario)  
+- **2025-08-21** – Mysten requested GitHub access to review findings; limited dataset shared  
+- **2025-08-22** – Mysten response: hygiene ≠ vuln; 80/443 intentional; 2375 not observed  
+- **2025-08-24** – PGDN follow-up: confirmed Mysten fingerprinting; raised OPSEC issue; reiterated questions  
+- **2025-08-26** – Mysten final note: no baseline, "we don't manage independent validators"; offered to "pass along general messages"  
+- **2025-09-03** – No further reply; public disclosure via this repo
 
-- **2025-08-02:** Initial contact via intermediary to Sui security (SSH, CVE summary only)
-- **2025-08-05:** Followup contact via intermediary with Sui security (SSH, CVE summary only)
-- **2025-08-15:** Discord #dev post requesting staff ticket (no info disclosed) - mostly ignored
-- **2025-08-15:** Follow-up - mostly ignored
+---
 
-## About PGDN - Why This Exists
+## Follow-Up: Subsequent Findings and Clarifications
 
-After 4+ years protecting DeFi and 20 years protecting networks, I kept seeing the same pattern: teams pour time and budget into **smart-contract risk** (audits, bounties, formal proofs) and **offload responsibility to auditors** - while **internet-facing infrastructure** is left to drift (ports, RPC, metrics, admin planes).
+- **Mysten validators** fingerprint as Ubuntu 22.04 / OpenSSH 8.9p1. CVEs exist upstream, but backports appear patched. Issue = OPSEC, not active vuln.  
+- **Port 2375** – Widespread SYN/ACK responses observed. Protocol unconfirmed → **LOW confidence**. Excluded from exploitability math.  
+- **Policy questions** (is SSH acceptable, are default web landers acceptable, what explains 2375) remain unanswered.  
+- **No baseline** exists for independent validators.  
+
+**Conclusion:** Systemic hygiene and OPSEC exposures across ~40% of the set represent a credible liveness risk. Without minimum standards, the network remains vulnerable to opportunistic or coordinated disruption.
+
+---
+
+## About PGDN – Why This Exists
+
+After 20 years in network security and 4+ years protecting DeFi, the same pattern repeats:  
+teams focus on **smart-contract audits** while **internet-facing infrastructure drifts open** (ports, RPC, metrics, admin planes).  
 
 **Passing an audit ≠ securing a network.**
 
-Recent interactions with Sui reinforced that gap. There's often a fundamental misunderstanding that if validator consensus communication is encrypted, other exposed services don't matter. This is dangerously wrong. Every exposed service is an attack vector. A CVE on ANY port can lead to full compromise. Our goal is to prevent these misunderstandings from becoming disasters.
+PGDN exists to measure **outside-in posture** of DeFi/DePIN infrastructure, quantify systemic risk, and provide actionable remediation.
 
-### What [pgdn.ai](http://pgdn.ai/) Analyses
+---
 
-- DeFi/DePIN **networks** - not just validators
-- Components like **validators/fullnodes, RPC gateways, indexers, bridges, sequencers, oracles, staking pools**, plus related **management/metrics** surfaces
-- Byzantine fault tolerance thresholds and consensus risk
+## How We Operate (Safety First)
 
-### How We Operate (Safety First)
+- **No exploitation.** External observation only  
+- **Network-agnostic scoring** for cross-ecosystem comparison  
+- **On-chain publication** of anonymised scores for accountability  
+- **Operator self-checks + remediation checklist** available on request  
+- **Optional simulated attack** only with explicit operator consent (scoped, non-destructive)
 
-- **No exploitation or stress-testing.** We observe what's publicly reachable and quantify risk. The objective is **hardening**, not disruption
-- Nodes are **analysed and scored** using a network-agnostic model so ecosystems can be compared fairly
-- We publish **anonymised scores on-chain** (with integrity hashes) to create an **indisputable audit trail** without exposing operators
-- Validators can **claim their nodes** through secure verification to access detailed findings
-- We provide **operator self-checks** and a straightforward **remediation checklist** on request
-- **Optional, opt-in "simulated attack".** When an owner explicitly asks, we run a **scoped, non-destructive simulation** to demonstrate impact paths and validate fixes. This is consent-based, rate-limited, and designed not to degrade service
+---
 
-### What We Don't Do
+## Why This Matters
 
-- We don't dump IPs/hosts or name operators in public artifacts
-- We don't run attacks without explicit operator consent
-- We don't publish PoCs that could enable opportunistic abuse
-- We don't disclose specific CVE details publicly
+Making exposure visible — then **coaching fixes** — is the fastest way to keep networks online and trustworthy. Hygiene is not cosmetic; it is the difference between resilience and outage.
 
-### Why This Matters
-
-Making exposure visible - then **coaching fixes** - is the fastest way to keep networks online and trustworthy. That's the service we offer: measurable posture, accountable publication, and practical remediation that hardens the entire ecosystem.
+---
 
 ## Platform Status
 
-PGDN was founded in July 2025 and is still in **early access, invite only**. If you're Sui staff and want a quick sanity check before broader publication, please reach out.
+PGDN was founded in July 2025 and is in **invite-only early access**.  
+For Sui staff or operators wanting private remediation guidance, contact:
 
-**Contact:**
+**Simon Morley** – [pgdn.ai](http://pgdn.ai) | [github.com/simonmorley](http://github.com/simonmorley) | [linkedin.com/in/simonpmorley](https://linkedin.com/in/simonpmorley)
 
-Simon ([pgdn.ai](http://pgdn.ai/))
-[github.com/simonmorley](http://github.com/simonmorley)
-[linkedin.com/in/simonpmorley](https://linkedin.com/in/simonpmorley)
+---
 
 ## Documentation
 
-- [Simulated Attack](simulated_attack.md)
-- [Responsible Disclosure Timeline](timeline.md)
-- [Externally Observable Posture Findings](findings.md)
-- [Limitations, Assumptions & Review Status](limitations.md)
-- [Methodology](methodology.md)
-- [Remediation](remediation.md)
-- [Project Status](status.md)
-- [Contact](contact.md)
-- [Security](security.md)
-- [Roadmap](roadmap.md)
-- [Validation](validation.md)
+- [Simulated Attack](simulated_attack.md)  
+- [Responsible Disclosure Timeline](timeline.md)  
+- [Externally Observable Posture Findings](findings.md)  
+- [Limitations, Assumptions & Review Status](limitations.md)  
+- [Methodology](methodology.md)  
+- [Remediation](remediation.md)  
+- [Project Status](status.md)  
+- [Contact](contact.md)  
+- [Security](security.md)  
+- [Roadmap](roadmap.md)  
+- [Validation](validation.md)  
 
-*This analysis represents a point-in-time assessment. Actual security posture may have changed. All scans were conducted under responsible disclosure principles with no exploitation or service disruption.*
+---
 
-Licensing: CC BY-NC-ND 4.0 — journalists may quote with attribution to PGDN; commercial reuse and derivative datasets prohibited.
+*This analysis represents a point-in-time snapshot. Posture may have changed. All scans conducted under responsible disclosure principles, without exploitation or service disruption.*  
+
+Licensing: CC BY-NC-ND 4.0 — journalists may quote with attribution to **PGDN**; commercial reuse and derivative datasets prohibited.
