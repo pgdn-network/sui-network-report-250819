@@ -49,11 +49,13 @@ We disclosed these findings privately to Mysten Labs  & Sui in August 2025.
 - **Cumulative Risk**  
   One exposed node is an accident. 40% is systemic. With only a one-third threshold for consensus liveness, hygiene exposures at this scale create real financial risk.
 
-- **Default Web Landers Misinterpreted**  
-  Mysten Labs responded that 80/443 exposure was "intentional" for RPC.  
-  However, many validators are serving **default Apache landing pages** on those ports. Many with critical CVEs too.
-  This is not RPC — it is a misconfigured web server. Treating default landers as "intended RPC endpoints" is a fundamental misunderstanding of hygiene.  
-  Confusing a stock Apache index page with an RPC endpoint underscores why independent posture analysis is essential: without it, basic hygiene issues get dismissed as non-issues.
+### Default Web Landers Misinterpreted
+
+Mysten Labs responded that 80/443 exposure was "intentional" for RPC. However, many validators are serving **default Apache landing pages** on those ports — many with **critical CVEs**.
+
+This is not RPC — it is a misconfigured web server. Treating default landers as "intended RPC endpoints" is a fundamental misunderstanding of hygiene. Also, Sui validators should NOT be running webservers!
+
+Confusing a stock Apache index page with an RPC endpoint underscores why **independent posture analysis** is essential: without it, basic hygiene issues get dismissed as non-issues.
 
 ## Responsible Disclosure Timeline
 
