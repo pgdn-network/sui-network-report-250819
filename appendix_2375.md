@@ -28,10 +28,8 @@ Even absent Docker, the uniform open state across validators is a red flag:
 
 **Pattern of Dismissal**  
 This is not the first time exposures have been reframed incorrectly.  
-Mysten described default Apache pages on 80/443 as "intentional RPC."  
-They are not. They are **CVE-affected Apache servers** left exposed on validator hosts.  
-Mislabeling vulnerable services as "intended" endpoints underscores why independent posture analysis is required:  
-otherwise, basic hygiene issues get waved away while real risk persists.
+- Mysten described default Apache pages on 80/443 as "intentional RPC." They are not. They are **CVE-affected Apache servers** left exposed on validator hosts.  
+- Mislabeling vulnerable services as "intended" endpoints underscores why independent posture analysis is required: otherwise, basic hygiene issues get waved away while real risk persists.
 
 **Operator self-check:**  
 On your validator host, run:  
