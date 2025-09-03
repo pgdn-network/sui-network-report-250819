@@ -19,8 +19,6 @@ Key exposures observed:
 
 [Full technical analysis and methodology below and in the [simulated_attack.md](simulated_attack.md)]
 
----
-
 ## Recent Interactions & Response
 
 We disclosed these findings privately to Mysten Labs  & Sui in August 2025.  
@@ -33,8 +31,6 @@ We disclosed these findings privately to Mysten Labs  & Sui in August 2025.
 - Separately, their legal team instructed our contact inside Mysten that he could no longer discuss this with us.  
 
 **Our position:** Hygiene and OPSEC exposures are not cosmetic. They are the *entry points* attackers chain into consensus-level disruption. In decentralized systems, the absence of a minimum baseline leaves the entire network at risk.
-
----
 
 ## Why Hygiene & OPSEC Matter
 
@@ -59,8 +55,6 @@ We disclosed these findings privately to Mysten Labs  & Sui in August 2025.
   This is not RPC — it is a misconfigured web server. Treating default landers as "intended RPC endpoints" is a fundamental misunderstanding of hygiene.  
   Confusing a stock Apache index page with an RPC endpoint underscores why independent posture analysis is essential: without it, basic hygiene issues get dismissed as non-issues.
 
----
-
 ## Responsible Disclosure Timeline
 
 - **2025-08-02** – Initial contact via intermediary to Sui security (SSH, CVE summary only)  
@@ -73,8 +67,6 @@ We disclosed these findings privately to Mysten Labs  & Sui in August 2025.
 - **2025-08-26** – Mysten final note: no baseline, "we don't manage independent validators"; offered to "pass along general messages"  
 - **2025-09-03** – No further reply; public disclosure via this repo
 
----
-
 ## Follow-Up: Subsequent Findings and Clarifications
 
 - **Mysten validators** fingerprint as Ubuntu 22.04 / OpenSSH 8.9p1. CVEs exist upstream, but backports appear patched. Issue = OPSEC, not active vuln.  
@@ -83,8 +75,6 @@ We disclosed these findings privately to Mysten Labs  & Sui in August 2025.
 - **No baseline** exists for independent validators.  
 
 **Conclusion:** Systemic hygiene and OPSEC exposures across ~40% of the set represent a credible liveness risk. Without minimum standards, the network remains vulnerable to opportunistic or coordinated disruption.
-
----
 
 ## About PGDN – Why This Exists
 
@@ -95,8 +85,6 @@ teams focus on **smart-contract audits** while **internet-facing infrastructure 
 
 PGDN exists to measure **outside-in posture** of DeFi/DePIN infrastructure, quantify systemic risk, and provide actionable remediation.
 
----
-
 ## How We Operate (Safety First)
 
 - **No exploitation.** External observation only  
@@ -105,13 +93,9 @@ PGDN exists to measure **outside-in posture** of DeFi/DePIN infrastructure, quan
 - **Operator self-checks + remediation checklist** available on request  
 - **Optional simulated attack** only with explicit operator consent (scoped, non-destructive)
 
----
-
 ## Why This Matters
 
 Making exposure visible — then **coaching fixes** — is the fastest way to keep networks online and trustworthy. Hygiene is not cosmetic; it is the difference between resilience and outage.
-
----
 
 ## Platform Status
 
@@ -119,8 +103,6 @@ PGDN was founded in July 2025 and is in **invite-only early access**.
 For Sui staff or operators wanting private remediation guidance, contact:
 
 **Simon Morley** – [pgdn.ai](http://pgdn.ai) | [github.com/simonmorley](http://github.com/simonmorley) | [linkedin.com/in/simonpmorley](https://linkedin.com/in/simonpmorley)
-
----
 
 ## Documentation
 
