@@ -2,7 +2,8 @@
 
 ## Critical Finding: Consensus Liveness at Risk
 
-**TL;DR:** External scans of the Sui network (Aug 2025) show that **~40% of voting power exposes SSH or default web servers, or runs CVE-affected services**.  
+**TL;DR:** External scans of the Sui network (Aug 2025) show that **~40% of voting power exposes SSH or default web servers, or runs CVE-affected services**.
+
 Consensus halts if ~33.4% of voting power is disrupted. At the time of scan, **3,955 voting power (~39.6%) was exposed vs. 3,334 required to halt** — leaving only a 621 voting power margin.  
 
 This is a **credible systemic risk**. One coordinated attack timed with a new SSH or web CVE could result in a multi-day outage affecting billions in assets.  
