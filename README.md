@@ -10,7 +10,7 @@ This is a **credible systemic risk**. One coordinated attack timed with a new SS
 
 Key exposures observed:
 - **39.6% voting power** externally exposed via SSH and/or CVEs  
-- **28.6%** running CVE-affected services  
+- **28.6%** running CVE-affected services (note: some validators run patched Ubuntu builds where CVEs are backported, so this figure represents a conservative upper bound and may come down with operator verification)
 - **38.5%** SSH publicly reachable  
 - **31.9%** serving websites (validators should not)  
 - **37%** exposing public metrics  
